@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nosso Universo Particular</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div id="gatekeeper" class="active">
+        <div class="gatekeeper-card">
+            <h1>Nosso Universo Particular</h1>
+            <p>Para entrar, responda nossa pergunta secreta:</p>
+            <label for="secret-answer">Onde foi nosso primeiro beijo?</label>
+            <input type="text" id="secret-answer" placeholder="Sua resposta aqui...">
+            <button id="btn-enter">Entrar</button>
+            <p id="error-msg" class="hidden">Ops, tente novamente, meu amor! ❤️</p>
+        </div>
+    </div>
+
+    <main id="app" class="hidden">
+        
+        <nav class="bottom-nav">
+            <button class="nav-btn active" data-target="dashboard">Início</button>
+            <button class="nav-btn" data-target="capsule">Cápsula</button>
+            <button class="nav-btn" data-target="timeline">História</button>
+            <button class="nav-btn" data-target="bucketlist">Promessas</button>
+        </nav>
+
+        <section id="dashboard" class="page active">
+            <header>
+                <h1>Bem-vindo(a), meu amor</h1>
+            </header>
+            
+            <div class="widget counter-widget">
+                <h2>Nossa Jornada</h2>
+                <p>Já se passaram...</p>
+                <div class="time-container">
+                    <div class="time-box"><span id="days">0</span><small>Dias</small></div>
+                    <div class="time-box"><span id="hours">0</span><small>Horas</small></div>
+                    <div class="time-box"><span id="minutes">0</span><small>Minutos</small></div>
+                </div>
+                <p>...e eu te amo mais a cada segundo.</p>
+            </div>
+        </section>
+
+        <section id="capsule" class="page hidden">
+            <h1>Cápsula do Tempo</h1>
+            
+            <div class="widget">
+                <h2>Cartas Agendadas</h2>
+                <div class="letter-card locked" data-unlock-date="2026-06-12">
+                    <h3>Para o Dia dos Namorados</h3>
+                    <p class="status">Disponível em: 12/06/2026</p>
+                    <button class="btn-open-letter" disabled>Cadeado Trancado 🔒</button>
+                </div>
+            </div>
+
+            <div class="widget">
+                <h2>Abra Quando...</h2>
+                <div class="open-when-grid">
+                    <button class="btn-open-when" onclick="alert('Lembre-se que eu estou aqui com você, sempre. Respire fundo, eu te amo!')">Estiver triste</button>
+                    <button class="btn-open-when" onclick="alert('Lembra daquela vez que nos perdemos na viagem e rimos até chorar? Você é minha alegria!')">Quiser rir</button>
+                    <button class="btn-open-when" onclick="alert('Estou tão orgulhoso(a) de você. Você é incrível!')">Precisar de coragem</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="timeline" class="page hidden">
+            <h1>Nossa História</h1>
+            <div class="timeline-container">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>O Primeiro Encontro</h3>
+                        <span class="date">15 de Março de 2022</span>
+                        <p>O dia em que nossos olhares se cruzaram e tudo mudou. Estávamos tão nervosos!</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>A Primeira Viagem</h3>
+                        <span class="date">10 de Outubro de 2023</span>
+                        <p>Dias inesquecíveis explorando o mundo de mãos dadas.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="bucketlist" class="page hidden">
+            <h1>Mural de Promessas</h1>
+            <div class="widget">
+                <p>Nossos sonhos juntos:</p>
+                <ul class="checklist">
+                    <li>
+                        <label>
+                            <input type="checkbox" checked>
+                            <span class="custom-checkbox"></span>
+                            Adotar um pet juntos
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="checkbox">
+                            <span class="custom-checkbox"></span>
+                            Fazer um piquenique na praia
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="checkbox">
+                            <span class="custom-checkbox"></span>
+                            Viajar para a Itália
+                        </label>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
