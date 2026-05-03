@@ -29,13 +29,11 @@
         input, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 12px; font-family: inherit; font-size: 1rem; }
         
         .file-input-wrapper { background: #f9f9f9; border: 2px dashed var(--rosa); padding: 20px; text-align: center; border-radius: 12px; cursor: pointer; transition: 0.3s; }
-        .file-input-wrapper:hover { background: #f0f0f0; }
         #img-preview { width: 100%; border-radius: 10px; margin-top: 10px; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
         .btn-main { width: 100%; background: var(--rosa); color: white; border: none; padding: 15px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 1rem; margin-top: 10px; transition: 0.3s; }
-        .btn-main:hover { background: var(--dourado); transform: translateY(-2px); }
+        .btn-main:hover { background: var(--dourado); }
 
-        /* OUTPUT DO CÓDIGO */
         .code-area { margin-top: 20px; display: none; animation: fadeIn 0.5s; }
         .code-box { 
             background: #222; color: #4af; padding: 15px; border-radius: 10px; 
@@ -43,19 +41,16 @@
             word-break: break-all; border: 1px solid #444; margin-bottom: 10px;
         }
         .btn-copy { background: #444; color: white; border: none; padding: 10px; width: 100%; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: bold; }
-        .btn-copy:hover { background: #555; }
 
-        /* CARTA FINAL */
         .letter-paper { background: white; padding: 35px; border-radius: 5px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
         .letter-img { width: 100%; border-radius: 4px; margin-bottom: 25px; }
         .letter-title { font-family: 'Dancing Script', cursive; font-size: 2.5rem; color: var(--dourado); margin-bottom: 15px; text-align: center; }
         .letter-text { font-size: 1.15rem; line-height: 1.8; margin-bottom: 25px; white-space: pre-wrap; color: #444; }
         
         .counter-box { background: var(--creme); padding: 20px; border-radius: 15px; text-align: center; margin: 25px 0; border: 1px solid var(--dourado); }
-        .counter-box span { display: block; font-size: 0.9rem; text-transform: uppercase; color: var(--dourado); letter-spacing: 1px; }
         .counter-box strong { font-size: 1.8rem; display: block; color: var(--dark); }
         
-        .letter-sig { text-align: right; font-family: 'Dancing Script', cursive; font-size: 2rem; margin-top: 40px; border-top: 1px dotted #ccc; padding-top: 15px; color: var(--dark); }
+        .letter-sig { text-align: right; font-family: 'Dancing Script', cursive; font-size: 2rem; margin-top: 40px; border-top: 1px dotted #ccc; padding-top: 15px; }
 
         .hidden { display: none; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -83,23 +78,23 @@
             </div>
 
             <div class="field">
-                <label>Título da Mensagem</label>
-                <input type="text" id="title" placeholder="Ex: Para meu eterno amor">
+                <label>Título</label>
+                <input type="text" id="title" placeholder="Ex: Para meu amor">
             </div>
 
             <div class="field">
                 <label>Sua Carta</label>
-                <textarea id="message" rows="5" placeholder="Diga o que sente..."></textarea>
+                <textarea id="message" rows="5" placeholder="Emojis e acentos liberados! ❤️"></textarea>
             </div>
 
             <div class="field">
-                <label>Nossa Data Especial (Cronômetro)</label>
+                <label>Data Especial</label>
                 <input type="date" id="start-date">
             </div>
 
             <div class="field">
                 <label>Assinatura</label>
-                <input type="text" id="signature" placeholder="Com amor, [Seu Nome]">
+                <input type="text" id="signature" placeholder="Sempre seu(sua)...">
             </div>
 
             <button class="btn-main" onclick="generateCode()">Gerar Código Mágico ✨</button>
@@ -113,8 +108,8 @@
         <section id="tab-open" class="card hidden">
             <h2>Resgatar Carta</h2>
             <div class="field">
-                <label>Cole o código recebido:</label>
-                <textarea id="input-code" rows="4" placeholder="Cole aqui..."></textarea>
+                <label>Cole o código aqui:</label>
+                <textarea id="input-code" rows="4"></textarea>
             </div>
             <button class="btn-main" onclick="openLetter()">Revelar Mistério 💌</button>
 
@@ -140,71 +135,78 @@
             document.getElementById('nav-' + name).classList.add('active');
         }
 
-        // Função para diminuir a imagem e o código não ficar gigante
         function processImage() {
             const file = document.getElementById('file-input').files[0];
             if (!file) return;
 
             const reader = new FileReader();
             reader.readAsDataURL(file);
-            reader.onload = function(event) {
+            reader.onload = function(e) {
                 const img = new Image();
-                img.src = event.target.result;
+                img.src = e.target.result;
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 600; // Otimiza para mobile
-                    const scaleSize = MAX_WIDTH / img.width;
+                    const MAX_WIDTH = 500; 
+                    const scale = MAX_WIDTH / img.width;
                     canvas.width = MAX_WIDTH;
-                    canvas.height = img.height * scaleSize;
-
+                    canvas.height = img.height * scale;
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-                    // Salva como JPG com qualidade média para reduzir o código
-                    optimizedImage = canvas.toDataURL('image/jpeg', 0.6);
-                    const preview = document.getElementById('img-preview');
-                    preview.src = optimizedImage;
-                    preview.style.display = 'block';
+                    optimizedImage = canvas.toDataURL('image/jpeg', 0.5); // Comprime bem para evitar erro de tamanho
+                    document.getElementById('img-preview').src = optimizedImage;
+                    document.getElementById('img-preview').style.display = 'block';
                 }
             }
         }
 
+        // Função segura para codificar Texto + Emojis + Imagem
+        function safeBtoa(str) {
+            return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) => {
+                return String.fromCharCode('0x' + p1);
+            }));
+        }
+
+        function safeAtob(str) {
+            return decodeURIComponent(Array.prototype.map.call(atob(str), (c) => {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+        }
+
         function generateCode() {
-            const data = {
-                t: document.getElementById('title').value,
-                m: document.getElementById('message').value,
-                s: document.getElementById('signature').value,
-                d: document.getElementById('start-date').value,
-                i: optimizedImage
-            };
+            try {
+                const data = {
+                    t: document.getElementById('title').value,
+                    m: document.getElementById('message').value,
+                    s: document.getElementById('signature').value,
+                    d: document.getElementById('start-date').value,
+                    i: optimizedImage
+                };
 
-            if(!data.t || !data.m) return alert("Preencha o título e a mensagem!");
+                if(!data.t || !data.m) return alert("Preencha título e mensagem!");
 
-            const json = JSON.stringify(data);
-            const encoded = btoa(unescape(encodeURIComponent(json)));
-            
-            document.getElementById('code-area').style.display = 'block';
-            document.getElementById('code-output').innerText = encoded;
-            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                const json = JSON.stringify(data);
+                const encoded = safeBtoa(json);
+                
+                document.getElementById('code-area').style.display = 'block';
+                document.getElementById('code-output').innerText = encoded;
+            } catch(e) {
+                alert("Erro ao criar código. Tente usar uma foto menor!");
+            }
         }
 
         function copyToClipboard() {
             const code = document.getElementById('code-output').innerText;
             navigator.clipboard.writeText(code).then(() => {
-                const btn = document.getElementById('btn-copy');
-                btn.innerText = "✅ Código Copiado!";
-                btn.style.background = "#28a745";
-                setTimeout(() => {
-                    btn.innerText = "📋 Copiar Código da Carta";
-                    btn.style.background = "#444";
-                }, 2000);
+                document.getElementById('btn-copy').innerText = "✅ Copiado!";
+                setTimeout(() => document.getElementById('btn-copy').innerText = "📋 Copiar Código da Carta", 2000);
             });
         }
 
         function openLetter() {
             const code = document.getElementById('input-code').value.trim();
+            if(!code) return;
             try {
-                const decoded = JSON.parse(decodeURIComponent(escape(atob(code))));
+                const decoded = JSON.parse(safeAtob(code));
                 
                 document.getElementById('view-title').innerText = decoded.t;
                 document.getElementById('view-msg').innerText = decoded.m;
@@ -212,26 +214,19 @@
                 
                 if(decoded.i) {
                     document.getElementById('view-img').src = decoded.i;
-                    document.getElementById('view-img').classList.remove('hidden');
-                } else {
-                    document.getElementById('view-img').classList.add('hidden');
+                    document.getElementById('view-img').style.display = 'block';
                 }
 
                 if(decoded.d) {
-                    const start = new Date(decoded.d);
-                    const now = new Date();
-                    const diff = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+                    const diff = Math.floor((new Date() - new Date(decoded.d)) / (1000 * 60 * 60 * 24));
                     const counter = document.getElementById('view-counter');
                     counter.innerHTML = `<span>Estamos juntos há</span><strong>${diff} Dias</strong>`;
                     counter.classList.remove('hidden');
-                } else {
-                    document.getElementById('view-counter').classList.add('hidden');
                 }
 
                 document.getElementById('final-display').classList.remove('hidden');
-                window.scrollTo({ top: document.getElementById('final-display').offsetTop, behavior: 'smooth' });
             } catch(e) {
-                alert("O código parece estar incompleto ou errado.");
+                alert("Código inválido! Verifique se copiou tudo.");
             }
         }
     </script>
