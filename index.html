@@ -3,326 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Uma Carta para Você ❤️</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
-
+    <title>Nosso Universo: Cartas Secretas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
     <style>
-        /* --- VARIÁVEIS E ESTILOS GERAIS --- */
         :root {
-            --bg-carta: #fdfcfc; /* Papel levemente texturizado */
-            --rosa-seco: #E0B0FF;
+            --rosa: #E0B0FF;
             --dourado: #D4AF37;
-            --texto-escuro: #3A3A3A;
-            --texto-carta: #555;
-            --fonte-titulos: 'Dancing Script', cursive;
-            --fonte-textos: 'Lora', serif;
-            --shadow-carta: 0 10px 30px rgba(0, 0, 0, 0.15);
+            --creme: #FFFDD0;
+            --dark: #333;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body, html {
-            height: 100%;
-            width: 100%;
-            font-family: var(--fonte-textos);
-            overflow: hidden; /* Impede rolagem na tela de acesso */
+        body { 
+            font-family: 'Lora', serif; 
+            background: url('https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?q=80&w=1920') center/cover no-repeat fixed;
+            min-height: 100vh;
         }
 
-        /* --- FUNDO DE PARIS (Fixo) --- */
-        #site-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            /* IMAGEM DE FUNDO: Torre Eiffel */
-            background-image: url('https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?q=80&w=1920');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            z-index: -2;
-            transition: filter 1s ease;
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: -1; }
+
+        /* NAVEGAÇÃO */
+        nav { display: flex; justify-content: center; gap: 20px; padding: 20px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); }
+        nav button { 
+            background: none; border: 2px solid white; color: white; padding: 10px 20px; 
+            border-radius: 20px; cursor: pointer; transition: 0.3s; font-weight: bold;
         }
+        nav button.active { background: var(--rosa); border-color: var(--rosa); }
 
-        /* Sobreposição escura para dar contraste ao texto */
-        #bg-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.4);
-            z-index: -1;
-            transition: background-color 1s ease;
-        }
+        .container { max-width: 600px; margin: 40px auto; padding: 20px; }
+        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
 
-        /* CLASSES UTILITÁRIAS */
-        .hidden { display: none !important; }
-        .visible { display: flex !important; animation: fadeIn 1.5s ease forwards; }
+        /* FORMULÁRIO ESTILO INSTAGRAM */
+        .insta-creator h2 { font-family: 'Dancing Script', cursive; text-align: center; font-size: 2rem; color: var(--rosa); margin-bottom: 20px; }
+        .field { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: #666; }
+        input, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; }
+        
+        .preview-img { width: 100%; height: 200px; background: #eee; border-radius: 8px; margin-top: 10px; object-fit: cover; display: none; }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp Carta { from { opacity: 0; transform: translate(-50%, -40%); } to { opacity: 1; transform: translate(-50%, -50%); } }
+        .btn-generate { width: 100%; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; }
 
-        /* --- GATEKEEPER (TELA DE ACESSO) --- */
-        #gatekeeper {
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            text-align: center;
-            color: white;
-            z-index: 10;
-            position: relative;
-        }
+        /* EXIBIÇÃO DA CARTA */
+        .letter-display { display: none; animation: slideUp 0.8s ease; }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        .letter-paper { background: #fff; padding: 40px; position: relative; border-bottom: 30px solid white; }
+        .letter-image { width: 100%; border-radius: 4px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .letter-text { line-height: 1.8; color: var(--dark); font-size: 1.1rem; white-space: pre-wrap; }
+        .letter-sig { margin-top: 30px; font-family: 'Dancing Script', cursive; font-size: 2rem; text-align: right; color: var(--dourado); }
 
-        .gatekeeper-content {
-            max-width: 400px;
-            animation: fadeIn 2s ease;
-        }
+        .result-code { margin-top: 20px; background: #f4f4f4; padding: 15px; border-radius: 8px; word-break: break-all; font-size: 0.8rem; display: none; border: 1px dashed var(--rosa); }
 
-        .gatekeeper-content h1 {
-            font-family: var(--fonte-titulos);
-            font-size: 3rem;
-            color: white;
-            margin-bottom: 20px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-        }
-
-        .gatekeeper-content p {
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-        }
-
-        .pergunta {
-            font-weight: bold;
-            color: var(--rosa-seco);
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            display: block;
-        }
-
-        input {
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 20px;
-            border: none;
-            border-radius: 30px;
-            font-family: var(--fonte-textos);
-            outline: none;
-            text-align: center;
-            font-size: 1rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-
-        #gatekeeper button {
-            background-color: var(--rosa-seco);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: bold;
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 15px rgba(224, 176, 255, 0.4);
-        }
-
-        #gatekeeper button:hover {
-            background-color: var(--dourado);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
-        }
-
-        #error-msg {
-            color: #ffcccc;
-            margin-top: 15px;
-            font-weight: bold;
-            animation: fadeIn 0.5s ease;
-        }
-
-        /* --- A CARTA DE AMOR --- */
-        #app {
-            display: none; /* Escondido inicialmente */
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            padding: 20px;
-            overflow-y: auto; /* Permite rolar a carta se o texto for longo */
-            z-index: 5;
-            position: relative;
-        }
-
-        .love-letter {
-            background-color: var(--bg-carta);
-            max-width: 700px;
-            width: 100%;
-            padding: 60px 50px;
-            border-radius: 5px; /* Bordas menos arredondadas, estilo papel */
-            box-shadow: var(--shadow-carta);
-            position: relative;
-            margin: 40px 0; /* Espaço se precisar rolar */
-            
-            /* Efeito visual de papel */
-            background-image: linear-gradient(rgba(0,0,0,0.01) 1px, transparent 1px);
-            background-size: 100% 2em;
-            line-height: 2em; /* Alinha o texto com as linhas */
-        }
-
-        /* Detalhe dourado no topo da carta */
-        .love-letter::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 4px;
-            background-color: var(--dourado);
-            border-radius: 0 0 5px 5px;
-        }
-
-        .letter-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .letter-header h2 {
-            font-family: var(--fonte-titulos);
-            color: var(--dourado);
-            font-size: 3.5rem;
-            font-weight: 700;
-        }
-
-        .letter-content {
-            color: var(--texto-carta);
-            font-size: 1.15rem;
-            text-align: justify;
-        }
-
-        .letter-content p {
-            margin-bottom: 1.5em; /* Espaçamento parágrafos */
-            text-indent: 1em; /* Recuo primeira linha */
-        }
-
-        .letter-footer {
-            text-align: right;
-            margin-top: 50px;
-            font-family: var(--fonte-titulos);
-            font-size: 2rem;
-            color: var(--texto-escuro);
-        }
-
-        /* Símbolo de selo no final */
-        .wax-seal {
-            display: block;
-            text-align: center;
-            margin-top: 30px;
-            color: #b32d2d; /* Vermelho selo */
-            font-size: 3rem;
-            opacity: 0.8;
-        }
-
-        /* --- RESPONSIVIDADE (MOBILE-FIRST) --- */
-        @media (max-width: 600px) {
-            .gatekeeper-content h1 { font-size: 2.2rem; }
-            .love-letter { padding: 40px 25px; margin: 20px 0; }
-            .letter-header h2 { font-size: 2.8rem; }
-            .letter-content { font-size: 1.05rem; line-height: 1.8em; }
-            .love-letter { background-size: 100% 1.8em; line-height: 1.8em;}
-        }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
+    <div class="overlay"></div>
 
-    <div id="site-background"></div>
-    <div id="bg-overlay"></div>
+    <nav>
+        <button id="nav-create" class="active" onclick="tab('create')">Criar Carta</button>
+        <button id="nav-open" onclick="tab('open')">Abrir com Código</button>
+    </nav>
 
-    <div id="gatekeeper">
-        <div class="gatekeeper-content">
-            <h1>Nosso Universo</h1>
-            <p>Para ler esta carta, responda à nossa pergunta:</p>
-            <span class="pergunta">Onde foi nosso primeiro beijo?</span>
+    <div class="container">
+        <section id="tab-create" class="card insta-creator">
+            <h2>Criar Momento Especial</h2>
+            <div class="field">
+                <label>Título da Carta</label>
+                <input type="text" id="title" placeholder="Ex: Para meu eterno amor">
+            </div>
+            <div class="field">
+                <label>URL da Foto (Instagram ou Google Drive link direto)</label>
+                <input type="text" id="photo-url" placeholder="Cole o link da imagem aqui..." oninput="updatePreview()">
+                <img id="img-preview" class="preview-img">
+            </div>
+            <div class="field">
+                <label>Sua Mensagem</label>
+                <textarea id="message" rows="6" placeholder="Escreva aqui tudo o que você sente..."></textarea>
+            </div>
+            <button class="btn-generate" onclick="generateCode()">Gerar Código da Carta ✨</button>
             
-            <input type="text" id="secret-answer" placeholder="Sua resposta aqui...">
-            <button onclick="checkAnswer()">Abrir Carta ❤️</button>
-            
-            <p id="error-msg" class="hidden">Ops! Tente novamente, meu amor.</p>
-        </div>
+            <div id="code-output" class="result-code">
+                <p style="color:var(--dark); margin-bottom:5px"><strong>Copie e envie este código:</strong></p>
+                <span id="final-code"></span>
+            </div>
+        </section>
+
+        <section id="tab-open" class="card hidden">
+            <h2 style="font-family:'Dancing Script'; text-align:center; margin-bottom:20px; font-size:2rem">Resgatar Carta</h2>
+            <div class="field">
+                <label>Cole o código secreto aqui:</label>
+                <textarea id="input-code" rows="4" placeholder="Cole o código longo aqui..."></textarea>
+            </div>
+            <button class="btn-generate" onclick="openLetter()">Abrir Carta 💌</button>
+
+            <div id="display-area" class="letter-display" style="margin-top:30px">
+                <div class="letter-paper">
+                    <img id="view-img" class="letter-image" src="" alt="Momento">
+                    <h3 id="view-title" style="margin-bottom:15px; color:var(--dourado)"></h3>
+                    <div id="view-msg" class="letter-text"></div>
+                    <div class="letter-sig">Com amor, para sempre. ❤️</div>
+                </div>
+            </div>
+        </section>
     </div>
 
-    <main id="app">
-        <article class="love-letter">
-            <header class="letter-header">
-                <h2>Minha Vida,</h2>
-            </header>
-            
-            <div class="letter-content">
-                <p>Estou te escrevendo esta carta porque, às vezes, o mundo gira rápido demais e esquecemos de parar e apreciar o que realmente importa. E para mim, o que importa é você.</p>
-                
-                <p>Desde o momento em que nossos caminhos se cruzaram, minha vida ganhou uma cor e uma melodia que eu não sabia que existiam. Você é meu porto seguro, minha risada mais sincera e o sonho que eu nunca quero acordar.</p>
-
-                <p>Imaginei o cenário de Paris para esta carta porque, assim como a Torre Eiffel se destaca no horizonte, você se destaca em todos os meus pensamentos. Não importa onde estejamos, meu lar é onde você está.</p>
-                
-                <p>Obrigado(a) por ser exatamente quem você é. Eu te amo mais a cada dia.</p>
-                </div>
-
-            <footer class="letter-footer">
-                Com todo o meu amor,
-            </footer>
-            
-            <span class="wax-seal">❤️</span>
-        </article>
-    </main>
-
     <script>
-        // --- CONFIGURAÇÃO ---
-        // Defina a resposta secreta aqui (sempre em letras minúsculas)
-        const RESPOSTA_CORRETA = "cinema"; 
+        // Trocar de abas
+        function tab(name) {
+            document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+            document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+            document.getElementById('tab-' + name).classList.remove('hidden');
+            document.getElementById('nav-' + name).classList.add('active');
+        }
 
-        // --- LÓGICA DE ACESSO ---
-        function checkAnswer() {
-            const input = document.getElementById('secret-answer');
-            const respostaUsuario = input.value.trim().toLowerCase();
-            const gatekeeper = document.getElementById('gatekeeper');
-            const app = document.getElementById('app');
-            const erro = document.getElementById('error-msg');
-            const bg = document.getElementById('site-background');
-            const overlay = document.getElementById('bg-overlay');
-
-            if (respostaUsuario === RESPOSTA_CORRETA) {
-                // Sucesso: Esconde acesso, mostra carta
-                gatekeeper.style.display = 'none';
-                app.classList.add('visible'); // Usa classe flex para centralizar
-                
-                // UX: Ajusta o fundo para focar na carta
-                bg.style.filter = 'blur(5px) scale(1.05)'; // Desfoca levemente Paris
-                overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.6)'; // Escurece um pouco mais
-                
-                // Permite rolagem se a carta for grande
-                document.body.style.overflow = 'auto'; 
-                document.html.style.overflow = 'auto';
-            } else {
-                // Erro
-                erro.classList.remove('hidden');
-                input.style.border = '2px solid #ffcccc';
-                // Animação de "balanço" no erro (opcional, adicione se quiser)
-                setTimeout(() => input.style.border = 'none', 1500);
+        // Preview da imagem em tempo real
+        function updatePreview() {
+            const url = document.getElementById('photo-url').value;
+            const img = document.getElementById('img-preview');
+            if(url) {
+                img.src = url;
+                img.style.display = 'block';
             }
         }
 
-        // UX: Permite apertar 'Enter' para enviar
-        document.getElementById('secret-answer').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                checkAnswer();
+        // GERAR O CÓDIGO (Criptografia simples Base64)
+        function generateCode() {
+            const data = {
+                t: document.getElementById('title').value,
+                p: document.getElementById('photo-url').value,
+                m: document.getElementById('message').value
+            };
+
+            if(!data.t || !data.m) return alert("Preencha o título e a mensagem!");
+
+            const stringData = JSON.stringify(data);
+            const encoded = btoa(unescape(encodeURIComponent(stringData))); // Converte para código
+            
+            document.getElementById('code-output').style.display = 'block';
+            document.getElementById('final-code').innerText = encoded;
+            alert("Código gerado com sucesso! Role para baixo e copie.");
+        }
+
+        // ABRIR A CARTA USANDO O CÓDIGO
+        function openLetter() {
+            const code = document.getElementById('input-code').value.trim();
+            if(!code) return alert("Cole um código válido!");
+
+            try {
+                const decodedString = decodeURIComponent(escape(atob(code)));
+                const data = JSON.parse(decodedString);
+
+                // Preencher a carta
+                document.getElementById('view-title').innerText = data.t;
+                document.getElementById('view-msg').innerText = data.m;
+                
+                const img = document.getElementById('view-img');
+                if(data.p) {
+                    img.src = data.p;
+                    img.style.display = 'block';
+                } else {
+                    img.style.display = 'none';
+                }
+
+                // Mostrar área da carta
+                document.getElementById('display-area').style.display = 'block';
+                window.scrollTo({ top: document.getElementById('display-area').offsetTop, behavior: 'smooth' });
+
+            } catch(e) {
+                alert("Código inválido! Verifique se copiou tudo corretamente.");
             }
-        });
+        }
     </script>
 </body>
 </html>
