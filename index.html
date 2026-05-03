@@ -3,113 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nosso Universo: Cartas Secretas</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <title>Nosso Universo Particular: Editor Deluxe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Lora:ital,wght@0,400;1,400&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --rosa: #E0B0FF;
-            --dourado: #D4AF37;
-            --creme: #FFFDD0;
-            --dark: #333;
-        }
-
+        :root { --rosa: #E0B0FF; --dourado: #D4AF37; --creme: #FFFDD0; --dark: #333; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Lora', serif; 
-            background: url('https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?q=80&w=1920') center/cover no-repeat fixed;
-            min-height: 100vh;
+        body { font-family: 'Lora', serif; background: #1a1a1a; min-height: 100vh; color: var(--dark); }
+        
+        /* Fundo com imagem de Paris fixa */
+        .main-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?q=80&w=1920') center/cover;
+            filter: brightness(0.5); z-index: -1;
         }
 
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: -1; }
-
-        /* NAVEGAÇÃO */
-        nav { display: flex; justify-content: center; gap: 20px; padding: 20px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); }
-        nav button { 
-            background: none; border: 2px solid white; color: white; padding: 10px 20px; 
-            border-radius: 20px; cursor: pointer; transition: 0.3s; font-weight: bold;
-        }
+        nav { display: flex; justify-content: center; gap: 10px; padding: 15px; background: rgba(0,0,0,0.3); backdrop-filter: blur(5px); position: sticky; top: 0; z-index: 100; }
+        nav button { background: none; border: 1px solid white; color: white; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-size: 0.9rem; }
         nav button.active { background: var(--rosa); border-color: var(--rosa); }
 
-        .container { max-width: 600px; margin: 40px auto; padding: 20px; }
-        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .container { max-width: 500px; margin: 20px auto; padding: 10px; }
+        .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 
-        /* FORMULÁRIO ESTILO INSTAGRAM */
-        .insta-creator h2 { font-family: 'Dancing Script', cursive; text-align: center; font-size: 2rem; color: var(--rosa); margin-bottom: 20px; }
+        /* EDITOR */
+        h2 { font-family: 'Dancing Script', cursive; color: var(--dourado); text-align: center; margin-bottom: 20px; font-size: 2rem; }
         .field { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: #666; }
-        input, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.8rem; text-transform: uppercase; color: #888; }
+        input, textarea, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 10px; font-family: inherit; }
         
-        .preview-img { width: 100%; height: 200px; background: #eee; border-radius: 8px; margin-top: 10px; object-fit: cover; display: none; }
+        .emoji-bar { display: flex; gap: 5px; margin-top: 5px; overflow-x: auto; padding-bottom: 5px; }
+        .emoji-btn { background: #f0f0f0; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
 
-        .btn-generate { width: 100%; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .file-input-wrapper { background: #f9f9f9; border: 2px dashed #ddd; padding: 20px; text-align: center; border-radius: 10px; cursor: pointer; }
+        #img-preview { width: 100%; border-radius: 10px; margin-top: 10px; display: none; }
 
-        /* EXIBIÇÃO DA CARTA */
-        .letter-display { display: none; animation: slideUp 0.8s ease; }
-        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .btn-main { width: 100%; background: var(--rosa); color: white; border: none; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 1rem; margin-top: 15px; transition: 0.3s; }
+        .btn-main:hover { background: var(--dourado); }
+
+        /* CARTA FINAL */
+        .letter-paper { background: white; padding: 30px; border-radius: 5px; position: relative; box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
+        .letter-img { width: 100%; border-radius: 5px; margin-bottom: 20px; }
+        .letter-title { font-family: 'Dancing Script', cursive; font-size: 2.2rem; color: var(--dourado); margin-bottom: 15px; }
+        .letter-text { font-size: 1.1rem; line-height: 1.6; margin-bottom: 20px; white-space: pre-wrap; }
         
-        .letter-paper { background: #fff; padding: 40px; position: relative; border-bottom: 30px solid white; }
-        .letter-image { width: 100%; border-radius: 4px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .letter-text { line-height: 1.8; color: var(--dark); font-size: 1.1rem; white-space: pre-wrap; }
-        .letter-sig { margin-top: 30px; font-family: 'Dancing Script', cursive; font-size: 2rem; text-align: right; color: var(--dourado); }
+        .counter-box { background: var(--creme); padding: 15px; border-radius: 10px; text-align: center; margin: 20px 0; border: 1px solid var(--dourado); }
+        .counter-box span { display: block; font-size: 1.2rem; font-weight: bold; }
+        
+        .letter-sig { text-align: right; font-family: 'Dancing Script', cursive; font-size: 1.8rem; margin-top: 30px; border-top: 1px solid #eee; padding-top: 10px; }
 
-        .result-code { margin-top: 20px; background: #f4f4f4; padding: 15px; border-radius: 8px; word-break: break-all; font-size: 0.8rem; display: none; border: 1px dashed var(--rosa); }
-
+        .code-box { background: #333; color: #0f0; padding: 15px; border-radius: 10px; word-break: break-all; font-family: monospace; font-size: 0.7rem; margin-top: 15px; display: none; }
+        
         .hidden { display: none; }
     </style>
 </head>
 <body>
-    <div class="overlay"></div>
+    <div class="main-bg"></div>
 
     <nav>
-        <button id="nav-create" class="active" onclick="tab('create')">Criar Carta</button>
-        <button id="nav-open" onclick="tab('open')">Abrir com Código</button>
+        <button id="nav-create" class="active" onclick="tab('create')">Criar</button>
+        <button id="nav-open" onclick="tab('open')">Abrir</button>
     </nav>
 
     <div class="container">
-        <section id="tab-create" class="card insta-creator">
-            <h2>Criar Momento Especial</h2>
-            <div class="field">
-                <label>Título da Carta</label>
-                <input type="text" id="title" placeholder="Ex: Para meu eterno amor">
-            </div>
-            <div class="field">
-                <label>URL da Foto (Instagram ou Google Drive link direto)</label>
-                <input type="text" id="photo-url" placeholder="Cole o link da imagem aqui..." oninput="updatePreview()">
-                <img id="img-preview" class="preview-img">
-            </div>
-            <div class="field">
-                <label>Sua Mensagem</label>
-                <textarea id="message" rows="6" placeholder="Escreva aqui tudo o que você sente..."></textarea>
-            </div>
-            <button class="btn-generate" onclick="generateCode()">Gerar Código da Carta ✨</button>
+        <section id="tab-create" class="card">
+            <h2>Editor de Sonhos</h2>
             
-            <div id="code-output" class="result-code">
-                <p style="color:var(--dark); margin-bottom:5px"><strong>Copie e envie este código:</strong></p>
-                <span id="final-code"></span>
+            <div class="field">
+                <label>Foto da Galeria</label>
+                <div class="file-input-wrapper" onclick="document.getElementById('file-input').click()">
+                    Clique para escolher uma foto 📸
+                    <input type="file" id="file-input" class="hidden" accept="image/*" onchange="previewFile()">
+                    <img id="img-preview">
+                </div>
             </div>
+
+            <div class="field">
+                <label>Título Especial</label>
+                <input type="text" id="title" placeholder="Ex: Nosso Eterno Amor">
+            </div>
+
+            <div class="field">
+                <label>Sua Carta</label>
+                <textarea id="message" rows="5" placeholder="Escreva aqui..."></textarea>
+                <div class="emoji-bar">
+                    <button class="emoji-btn" onclick="addEmoji('❤️')">❤️</button>
+                    <button class="emoji-btn" onclick="addEmoji('✨')">✨</button>
+                    <button class="emoji-btn" onclick="addEmoji('🌹')">🌹</button>
+                    <button class="emoji-btn" onclick="addEmoji('💍')">💍</button>
+                    <button class="emoji-btn" onclick="addEmoji('👩‍❤️‍👨')">👩‍❤️‍👨</button>
+                </div>
+            </div>
+
+            <div class="field">
+                <label>Data de Início (Para o Cronômetro)</label>
+                <input type="date" id="start-date">
+            </div>
+
+            <div class="field">
+                <label>Sua Assinatura</label>
+                <input type="text" id="signature" placeholder="Seu nome...">
+            </div>
+
+            <button class="btn-main" onclick="generateDynamicCode()">Gerar Código Secreto 🔒</button>
+            <div id="code-output" class="code-box"></div>
         </section>
 
         <section id="tab-open" class="card hidden">
-            <h2 style="font-family:'Dancing Script'; text-align:center; margin-bottom:20px; font-size:2rem">Resgatar Carta</h2>
+            <h2>Resgatar Memória</h2>
             <div class="field">
-                <label>Cole o código secreto aqui:</label>
-                <textarea id="input-code" rows="4" placeholder="Cole o código longo aqui..."></textarea>
+                <label>Cole o código aqui:</label>
+                <textarea id="input-code" rows="4"></textarea>
             </div>
-            <button class="btn-generate" onclick="openLetter()">Abrir Carta 💌</button>
+            <button class="btn-main" onclick="openDynamicLetter()">Revelar Carta 💌</button>
 
-            <div id="display-area" class="letter-display" style="margin-top:30px">
+            <div id="final-display" class="hidden" style="margin-top: 25px;">
                 <div class="letter-paper">
-                    <img id="view-img" class="letter-image" src="" alt="Momento">
-                    <h3 id="view-title" style="margin-bottom:15px; color:var(--dourado)"></h3>
+                    <img id="view-img" class="letter-img">
+                    <h1 id="view-title" class="letter-title"></h1>
+                    <div id="view-counter" class="counter-box hidden"></div>
                     <div id="view-msg" class="letter-text"></div>
-                    <div class="letter-sig">Com amor, para sempre. ❤️</div>
+                    <div id="view-sig" class="letter-sig"></div>
                 </div>
             </div>
         </section>
     </div>
 
     <script>
-        // Trocar de abas
+        let base64Image = "";
+
         function tab(name) {
             document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
             document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
@@ -117,61 +137,72 @@
             document.getElementById('nav-' + name).classList.add('active');
         }
 
-        // Preview da imagem em tempo real
-        function updatePreview() {
-            const url = document.getElementById('photo-url').value;
-            const img = document.getElementById('img-preview');
-            if(url) {
-                img.src = url;
-                img.style.display = 'block';
+        function addEmoji(emoji) {
+            document.getElementById('message').value += emoji;
+        }
+
+        function previewFile() {
+            const file = document.getElementById('file-input').files[0];
+            const reader = new FileReader();
+            reader.onloadend = function() {
+                base64Image = reader.result;
+                const preview = document.getElementById('img-preview');
+                preview.src = reader.result;
+                preview.style.display = 'block';
+            }
+            if (file) reader.readAsDataURL(file);
+        }
+
+        function generateDynamicCode() {
+            const data = {
+                t: document.getElementById('title').value,
+                m: document.getElementById('message').value,
+                s: document.getElementById('signature').value,
+                d: document.getElementById('start-date').value,
+                i: base64Image // A imagem vai dentro do código!
+            };
+
+            if(!data.t || !data.m) return alert("Dê um título e escreva uma mensagem!");
+
+            try {
+                const json = JSON.stringify(data);
+                const encoded = btoa(unescape(encodeURIComponent(json)));
+                const output = document.getElementById('code-output');
+                output.innerText = encoded;
+                output.style.display = 'block';
+                alert("Código gerado! Copie o bloco verde e envie.");
+            } catch(e) {
+                alert("A imagem pode ser muito grande. Tente uma foto menor ou com menos resolução.");
             }
         }
 
-        // GERAR O CÓDIGO (Criptografia simples Base64)
-        function generateCode() {
-            const data = {
-                t: document.getElementById('title').value,
-                p: document.getElementById('photo-url').value,
-                m: document.getElementById('message').value
-            };
-
-            if(!data.t || !data.m) return alert("Preencha o título e a mensagem!");
-
-            const stringData = JSON.stringify(data);
-            const encoded = btoa(unescape(encodeURIComponent(stringData))); // Converte para código
-            
-            document.getElementById('code-output').style.display = 'block';
-            document.getElementById('final-code').innerText = encoded;
-            alert("Código gerado com sucesso! Role para baixo e copie.");
-        }
-
-        // ABRIR A CARTA USANDO O CÓDIGO
-        function openLetter() {
+        function openDynamicLetter() {
             const code = document.getElementById('input-code').value.trim();
-            if(!code) return alert("Cole um código válido!");
-
             try {
-                const decodedString = decodeURIComponent(escape(atob(code)));
-                const data = JSON.parse(decodedString);
-
-                // Preencher a carta
-                document.getElementById('view-title').innerText = data.t;
-                document.getElementById('view-msg').innerText = data.m;
+                const decoded = JSON.parse(decodeURIComponent(escape(atob(code))));
                 
-                const img = document.getElementById('view-img');
-                if(data.p) {
-                    img.src = data.p;
-                    img.style.display = 'block';
-                } else {
-                    img.style.display = 'none';
+                document.getElementById('view-title').innerText = decoded.t;
+                document.getElementById('view-msg').innerText = decoded.m;
+                document.getElementById('view-sig').innerText = decoded.s;
+                
+                if(decoded.i) {
+                    document.getElementById('view-img').src = decoded.i;
+                    document.getElementById('view-img').classList.remove('hidden');
                 }
 
-                // Mostrar área da carta
-                document.getElementById('display-area').style.display = 'block';
-                window.scrollTo({ top: document.getElementById('display-area').offsetTop, behavior: 'smooth' });
+                if(decoded.d) {
+                    const start = new Date(decoded.d);
+                    const now = new Date();
+                    const diff = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+                    const counter = document.getElementById('view-counter');
+                    counter.innerHTML = `<span>Estamos juntos há</span><strong>${diff} dias</strong>`;
+                    counter.classList.remove('hidden');
+                }
 
+                document.getElementById('final-display').classList.remove('hidden');
+                window.scrollTo({ top: document.getElementById('final-display').offsetTop, behavior: 'smooth' });
             } catch(e) {
-                alert("Código inválido! Verifique se copiou tudo corretamente.");
+                alert("Código inválido ou expirado.");
             }
         }
     </script>
