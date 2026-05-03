@@ -10,112 +10,115 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Lora', serif; background: #1a1a1a; min-height: 100vh; color: var(--dark); }
         
-        /* Fundo com imagem de Paris fixa */
         .main-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: url('https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?q=80&w=1920') center/cover;
-            filter: brightness(0.5); z-index: -1;
+            filter: brightness(0.4); z-index: -1;
         }
 
         nav { display: flex; justify-content: center; gap: 10px; padding: 15px; background: rgba(0,0,0,0.3); backdrop-filter: blur(5px); position: sticky; top: 0; z-index: 100; }
-        nav button { background: none; border: 1px solid white; color: white; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-size: 0.9rem; }
+        nav button { background: none; border: 1px solid white; color: white; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-size: 0.9rem; transition: 0.3s; }
         nav button.active { background: var(--rosa); border-color: var(--rosa); }
 
         .container { max-width: 500px; margin: 20px auto; padding: 10px; }
         .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 
-        /* EDITOR */
-        h2 { font-family: 'Dancing Script', cursive; color: var(--dourado); text-align: center; margin-bottom: 20px; font-size: 2rem; }
+        h2 { font-family: 'Dancing Script', cursive; color: var(--dourado); text-align: center; margin-bottom: 20px; font-size: 2.2rem; }
         .field { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.8rem; text-transform: uppercase; color: #888; }
-        input, textarea, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 10px; font-family: inherit; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.75rem; text-transform: uppercase; color: #888; letter-spacing: 1px; }
+        input, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 12px; font-family: inherit; font-size: 1rem; }
         
-        .emoji-bar { display: flex; gap: 5px; margin-top: 5px; overflow-x: auto; padding-bottom: 5px; }
-        .emoji-btn { background: #f0f0f0; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        .file-input-wrapper { background: #f9f9f9; border: 2px dashed var(--rosa); padding: 20px; text-align: center; border-radius: 12px; cursor: pointer; transition: 0.3s; }
+        .file-input-wrapper:hover { background: #f0f0f0; }
+        #img-preview { width: 100%; border-radius: 10px; margin-top: 10px; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
-        .file-input-wrapper { background: #f9f9f9; border: 2px dashed #ddd; padding: 20px; text-align: center; border-radius: 10px; cursor: pointer; }
-        #img-preview { width: 100%; border-radius: 10px; margin-top: 10px; display: none; }
+        .btn-main { width: 100%; background: var(--rosa); color: white; border: none; padding: 15px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 1rem; margin-top: 10px; transition: 0.3s; }
+        .btn-main:hover { background: var(--dourado); transform: translateY(-2px); }
 
-        .btn-main { width: 100%; background: var(--rosa); color: white; border: none; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 1rem; margin-top: 15px; transition: 0.3s; }
-        .btn-main:hover { background: var(--dourado); }
+        /* OUTPUT DO CÓDIGO */
+        .code-area { margin-top: 20px; display: none; animation: fadeIn 0.5s; }
+        .code-box { 
+            background: #222; color: #4af; padding: 15px; border-radius: 10px; 
+            font-family: monospace; font-size: 0.7rem; max-height: 100px; overflow-y: auto; 
+            word-break: break-all; border: 1px solid #444; margin-bottom: 10px;
+        }
+        .btn-copy { background: #444; color: white; border: none; padding: 10px; width: 100%; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: bold; }
+        .btn-copy:hover { background: #555; }
 
         /* CARTA FINAL */
-        .letter-paper { background: white; padding: 30px; border-radius: 5px; position: relative; box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
-        .letter-img { width: 100%; border-radius: 5px; margin-bottom: 20px; }
-        .letter-title { font-family: 'Dancing Script', cursive; font-size: 2.2rem; color: var(--dourado); margin-bottom: 15px; }
-        .letter-text { font-size: 1.1rem; line-height: 1.6; margin-bottom: 20px; white-space: pre-wrap; }
+        .letter-paper { background: white; padding: 35px; border-radius: 5px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+        .letter-img { width: 100%; border-radius: 4px; margin-bottom: 25px; }
+        .letter-title { font-family: 'Dancing Script', cursive; font-size: 2.5rem; color: var(--dourado); margin-bottom: 15px; text-align: center; }
+        .letter-text { font-size: 1.15rem; line-height: 1.8; margin-bottom: 25px; white-space: pre-wrap; color: #444; }
         
-        .counter-box { background: var(--creme); padding: 15px; border-radius: 10px; text-align: center; margin: 20px 0; border: 1px solid var(--dourado); }
-        .counter-box span { display: block; font-size: 1.2rem; font-weight: bold; }
+        .counter-box { background: var(--creme); padding: 20px; border-radius: 15px; text-align: center; margin: 25px 0; border: 1px solid var(--dourado); }
+        .counter-box span { display: block; font-size: 0.9rem; text-transform: uppercase; color: var(--dourado); letter-spacing: 1px; }
+        .counter-box strong { font-size: 1.8rem; display: block; color: var(--dark); }
         
-        .letter-sig { text-align: right; font-family: 'Dancing Script', cursive; font-size: 1.8rem; margin-top: 30px; border-top: 1px solid #eee; padding-top: 10px; }
+        .letter-sig { text-align: right; font-family: 'Dancing Script', cursive; font-size: 2rem; margin-top: 40px; border-top: 1px dotted #ccc; padding-top: 15px; color: var(--dark); }
 
-        .code-box { background: #333; color: #0f0; padding: 15px; border-radius: 10px; word-break: break-all; font-family: monospace; font-size: 0.7rem; margin-top: 15px; display: none; }
-        
         .hidden { display: none; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
     <div class="main-bg"></div>
 
     <nav>
-        <button id="nav-create" class="active" onclick="tab('create')">Criar</button>
-        <button id="nav-open" onclick="tab('open')">Abrir</button>
+        <button id="nav-create" class="active" onclick="tab('create')">Criar Carta</button>
+        <button id="nav-open" onclick="tab('open')">Abrir Código</button>
     </nav>
 
     <div class="container">
         <section id="tab-create" class="card">
-            <h2>Editor de Sonhos</h2>
+            <h2>Escrever Memória</h2>
             
             <div class="field">
                 <label>Foto da Galeria</label>
                 <div class="file-input-wrapper" onclick="document.getElementById('file-input').click()">
-                    Clique para escolher uma foto 📸
-                    <input type="file" id="file-input" class="hidden" accept="image/*" onchange="previewFile()">
+                    Selecionar Imagem 📸
+                    <input type="file" id="file-input" class="hidden" accept="image/*" onchange="processImage()">
                     <img id="img-preview">
                 </div>
             </div>
 
             <div class="field">
-                <label>Título Especial</label>
-                <input type="text" id="title" placeholder="Ex: Nosso Eterno Amor">
+                <label>Título da Mensagem</label>
+                <input type="text" id="title" placeholder="Ex: Para meu eterno amor">
             </div>
 
             <div class="field">
                 <label>Sua Carta</label>
-                <textarea id="message" rows="5" placeholder="Escreva aqui..."></textarea>
-                <div class="emoji-bar">
-                    <button class="emoji-btn" onclick="addEmoji('❤️')">❤️</button>
-                    <button class="emoji-btn" onclick="addEmoji('✨')">✨</button>
-                    <button class="emoji-btn" onclick="addEmoji('🌹')">🌹</button>
-                    <button class="emoji-btn" onclick="addEmoji('💍')">💍</button>
-                    <button class="emoji-btn" onclick="addEmoji('👩‍❤️‍👨')">👩‍❤️‍👨</button>
-                </div>
+                <textarea id="message" rows="5" placeholder="Diga o que sente..."></textarea>
             </div>
 
             <div class="field">
-                <label>Data de Início (Para o Cronômetro)</label>
+                <label>Nossa Data Especial (Cronômetro)</label>
                 <input type="date" id="start-date">
             </div>
 
             <div class="field">
-                <label>Sua Assinatura</label>
-                <input type="text" id="signature" placeholder="Seu nome...">
+                <label>Assinatura</label>
+                <input type="text" id="signature" placeholder="Com amor, [Seu Nome]">
             </div>
 
-            <button class="btn-main" onclick="generateDynamicCode()">Gerar Código Secreto 🔒</button>
-            <div id="code-output" class="code-box"></div>
+            <button class="btn-main" onclick="generateCode()">Gerar Código Mágico ✨</button>
+            
+            <div id="code-area" class="code-area">
+                <div id="code-output" class="code-box"></div>
+                <button class="btn-copy" id="btn-copy" onclick="copyToClipboard()">📋 Copiar Código da Carta</button>
+            </div>
         </section>
 
         <section id="tab-open" class="card hidden">
-            <h2>Resgatar Memória</h2>
+            <h2>Resgatar Carta</h2>
             <div class="field">
-                <label>Cole o código aqui:</label>
-                <textarea id="input-code" rows="4"></textarea>
+                <label>Cole o código recebido:</label>
+                <textarea id="input-code" rows="4" placeholder="Cole aqui..."></textarea>
             </div>
-            <button class="btn-main" onclick="openDynamicLetter()">Revelar Carta 💌</button>
+            <button class="btn-main" onclick="openLetter()">Revelar Mistério 💌</button>
 
-            <div id="final-display" class="hidden" style="margin-top: 25px;">
+            <div id="final-display" class="hidden" style="margin-top: 30px;">
                 <div class="letter-paper">
                     <img id="view-img" class="letter-img">
                     <h1 id="view-title" class="letter-title"></h1>
@@ -128,7 +131,7 @@
     </div>
 
     <script>
-        let base64Image = "";
+        let optimizedImage = "";
 
         function tab(name) {
             document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
@@ -137,46 +140,68 @@
             document.getElementById('nav-' + name).classList.add('active');
         }
 
-        function addEmoji(emoji) {
-            document.getElementById('message').value += emoji;
-        }
-
-        function previewFile() {
+        // Função para diminuir a imagem e o código não ficar gigante
+        function processImage() {
             const file = document.getElementById('file-input').files[0];
+            if (!file) return;
+
             const reader = new FileReader();
-            reader.onloadend = function() {
-                base64Image = reader.result;
-                const preview = document.getElementById('img-preview');
-                preview.src = reader.result;
-                preview.style.display = 'block';
+            reader.readAsDataURL(file);
+            reader.onload = function(event) {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 600; // Otimiza para mobile
+                    const scaleSize = MAX_WIDTH / img.width;
+                    canvas.width = MAX_WIDTH;
+                    canvas.height = img.height * scaleSize;
+
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                    // Salva como JPG com qualidade média para reduzir o código
+                    optimizedImage = canvas.toDataURL('image/jpeg', 0.6);
+                    const preview = document.getElementById('img-preview');
+                    preview.src = optimizedImage;
+                    preview.style.display = 'block';
+                }
             }
-            if (file) reader.readAsDataURL(file);
         }
 
-        function generateDynamicCode() {
+        function generateCode() {
             const data = {
                 t: document.getElementById('title').value,
                 m: document.getElementById('message').value,
                 s: document.getElementById('signature').value,
                 d: document.getElementById('start-date').value,
-                i: base64Image // A imagem vai dentro do código!
+                i: optimizedImage
             };
 
-            if(!data.t || !data.m) return alert("Dê um título e escreva uma mensagem!");
+            if(!data.t || !data.m) return alert("Preencha o título e a mensagem!");
 
-            try {
-                const json = JSON.stringify(data);
-                const encoded = btoa(unescape(encodeURIComponent(json)));
-                const output = document.getElementById('code-output');
-                output.innerText = encoded;
-                output.style.display = 'block';
-                alert("Código gerado! Copie o bloco verde e envie.");
-            } catch(e) {
-                alert("A imagem pode ser muito grande. Tente uma foto menor ou com menos resolução.");
-            }
+            const json = JSON.stringify(data);
+            const encoded = btoa(unescape(encodeURIComponent(json)));
+            
+            document.getElementById('code-area').style.display = 'block';
+            document.getElementById('code-output').innerText = encoded;
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         }
 
-        function openDynamicLetter() {
+        function copyToClipboard() {
+            const code = document.getElementById('code-output').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.getElementById('btn-copy');
+                btn.innerText = "✅ Código Copiado!";
+                btn.style.background = "#28a745";
+                setTimeout(() => {
+                    btn.innerText = "📋 Copiar Código da Carta";
+                    btn.style.background = "#444";
+                }, 2000);
+            });
+        }
+
+        function openLetter() {
             const code = document.getElementById('input-code').value.trim();
             try {
                 const decoded = JSON.parse(decodeURIComponent(escape(atob(code))));
@@ -188,6 +213,8 @@
                 if(decoded.i) {
                     document.getElementById('view-img').src = decoded.i;
                     document.getElementById('view-img').classList.remove('hidden');
+                } else {
+                    document.getElementById('view-img').classList.add('hidden');
                 }
 
                 if(decoded.d) {
@@ -195,14 +222,16 @@
                     const now = new Date();
                     const diff = Math.floor((now - start) / (1000 * 60 * 60 * 24));
                     const counter = document.getElementById('view-counter');
-                    counter.innerHTML = `<span>Estamos juntos há</span><strong>${diff} dias</strong>`;
+                    counter.innerHTML = `<span>Estamos juntos há</span><strong>${diff} Dias</strong>`;
                     counter.classList.remove('hidden');
+                } else {
+                    document.getElementById('view-counter').classList.add('hidden');
                 }
 
                 document.getElementById('final-display').classList.remove('hidden');
                 window.scrollTo({ top: document.getElementById('final-display').offsetTop, behavior: 'smooth' });
             } catch(e) {
-                alert("Código inválido ou expirado.");
+                alert("O código parece estar incompleto ou errado.");
             }
         }
     </script>
