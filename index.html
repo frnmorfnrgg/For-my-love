@@ -3,229 +3,326 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nosso Universo Particular ❤️</title>
+    <title>Uma Carta para Você ❤️</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 
     <style>
-        /* --- VARIÁVEIS E CORES --- */
+        /* --- VARIÁVEIS E ESTILOS GERAIS --- */
         :root {
-            --bg-creme: #FFFDD0;
+            --bg-carta: #fdfcfc; /* Papel levemente texturizado */
             --rosa-seco: #E0B0FF;
             --dourado: #D4AF37;
-            --texto-escuro: #4A4A4A;
+            --texto-escuro: #3A3A3A;
+            --texto-carta: #555;
             --fonte-titulos: 'Dancing Script', cursive;
             --fonte-textos: 'Lora', serif;
-            --shadow-suave: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --shadow-carta: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
 
-        /* --- RESET E GERAL --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            background-color: var(--bg-creme); 
-            color: var(--texto-escuro); 
+
+        body, html {
+            height: 100%;
+            width: 100%;
             font-family: var(--fonte-textos);
-            overflow-x: hidden;
-            min-height: 100vh;
+            overflow: hidden; /* Impede rolagem na tela de acesso */
         }
 
+        /* --- FUNDO DE PARIS (Fixo) --- */
+        #site-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* IMAGEM DE FUNDO: Torre Eiffel */
+            background-image: url('https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?q=80&w=1920');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: -2;
+            transition: filter 1s ease;
+        }
+
+        /* Sobreposição escura para dar contraste ao texto */
+        #bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            z-index: -1;
+            transition: background-color 1s ease;
+        }
+
+        /* CLASSES UTILITÁRIAS */
         .hidden { display: none !important; }
+        .visible { display: flex !important; animation: fadeIn 1.5s ease forwards; }
 
-        /* --- ANIMAÇÕES --- */
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-        @keyframes floatUp { to { transform: translateY(-110vh) rotate(360deg); opacity: 0; } }
-
-        /* --- ELEMENTOS ROMÂNTICOS --- */
-        #floating-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
-        .heart { position: absolute; bottom: -10vh; color: rgba(224, 176, 255, 0.5); font-size: 1.5rem; animation: floatUp linear infinite; }
-        .pulse-heart { display: inline-block; animation: pulse 1.5s infinite; color: #e74c3c; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp Carta { from { opacity: 0; transform: translate(-50%, -40%); } to { opacity: 1; transform: translate(-50%, -50%); } }
 
         /* --- GATEKEEPER (TELA DE ACESSO) --- */
-        #gatekeeper { height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; position: relative; z-index: 10; }
-        .gatekeeper-card { 
-            background: white; padding: 40px 30px; border-radius: 20px; 
-            box-shadow: var(--shadow-suave); text-align: center; max-width: 400px; width: 100%;
-            border: 1px solid rgba(212, 175, 55, 0.3);
+        #gatekeeper {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+            color: white;
+            z-index: 10;
+            position: relative;
         }
-        h1 { font-family: var(--fonte-titulos); color: var(--dourado); font-size: 2.8rem; margin-bottom: 1rem; }
-        input { 
-            width: 100%; padding: 12px; margin: 15px 0; border: 1px solid var(--rosa-seco); 
-            border-radius: 10px; font-family: var(--fonte-textos); outline: none; text-align: center;
-        }
-        button { 
-            background: var(--rosa-seco); color: white; border: none; padding: 12px 30px; 
-            border-radius: 25px; cursor: pointer; transition: 0.3s; font-weight: bold;
-        }
-        button:hover { background: var(--dourado); transform: scale(1.05); }
 
-        /* --- DASHBOARD E WIDGETS --- */
-        #app { max-width: 600px; margin: 0 auto; padding: 20px 20px 100px 20px; animation: fadeIn 1s ease; position: relative; z-index: 5; }
-        .widget { background: white; padding: 25px; border-radius: 20px; box-shadow: var(--shadow-suave); margin-bottom: 20px; text-align: center; }
-        .time-container { display: flex; justify-content: center; gap: 15px; margin: 20px 0; }
-        .time-box { background: var(--bg-creme); padding: 10px; border-radius: 12px; min-width: 70px; border: 1px solid var(--rosa-seco); }
-        .time-box span { display: block; font-size: 1.6rem; font-weight: bold; color: var(--dourado); }
-
-        /* --- LINHA DO TEMPO (POLAROID STYLE) --- */
-        .timeline-item { margin-bottom: 30px; position: relative; }
-        .timeline-content { 
-            background: white; padding: 15px 15px 40px 15px; border-radius: 2px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1); transform: rotate(-1deg);
+        .gatekeeper-content {
+            max-width: 400px;
+            animation: fadeIn 2s ease;
         }
-        .timeline-item:nth-child(even) .timeline-content { transform: rotate(2deg); }
-        .date { font-weight: bold; color: var(--rosa-seco); font-size: 0.9rem; }
 
-        /* --- NAV BAR --- */
-        .bottom-nav { 
-            position: fixed; bottom: 0; left: 0; width: 100%; background: white; 
-            display: flex; justify-content: space-around; padding: 15px; 
-            box-shadow: 0 -5px 15px rgba(0,0,0,0.05); z-index: 100;
+        .gatekeeper-content h1 {
+            font-family: var(--fonte-titulos);
+            font-size: 3rem;
+            color: white;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
-        .nav-btn { background: none; color: var(--texto-escuro); box-shadow: none; padding: 5px; border-bottom: 2px solid transparent; border-radius: 0; }
-        .nav-btn.active { color: var(--dourado); border-bottom: 2px solid var(--dourado); }
 
-        /* MURAL DE PROMESSAS */
-        .checklist { list-style: none; text-align: left; }
-        .checklist li { margin: 10px 0; display: flex; align-items: center; gap: 10px; }
-        input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--rosa-seco); }
+        .gatekeeper-content p {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .pergunta {
+            font-weight: bold;
+            color: var(--rosa-seco);
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 30px;
+            font-family: var(--fonte-textos);
+            outline: none;
+            text-align: center;
+            font-size: 1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        #gatekeeper button {
+            background-color: var(--rosa-seco);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(224, 176, 255, 0.4);
+        }
+
+        #gatekeeper button:hover {
+            background-color: var(--dourado);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
+        }
+
+        #error-msg {
+            color: #ffcccc;
+            margin-top: 15px;
+            font-weight: bold;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* --- A CARTA DE AMOR --- */
+        #app {
+            display: none; /* Escondido inicialmente */
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+            overflow-y: auto; /* Permite rolar a carta se o texto for longo */
+            z-index: 5;
+            position: relative;
+        }
+
+        .love-letter {
+            background-color: var(--bg-carta);
+            max-width: 700px;
+            width: 100%;
+            padding: 60px 50px;
+            border-radius: 5px; /* Bordas menos arredondadas, estilo papel */
+            box-shadow: var(--shadow-carta);
+            position: relative;
+            margin: 40px 0; /* Espaço se precisar rolar */
+            
+            /* Efeito visual de papel */
+            background-image: linear-gradient(rgba(0,0,0,0.01) 1px, transparent 1px);
+            background-size: 100% 2em;
+            line-height: 2em; /* Alinha o texto com as linhas */
+        }
+
+        /* Detalhe dourado no topo da carta */
+        .love-letter::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background-color: var(--dourado);
+            border-radius: 0 0 5px 5px;
+        }
+
+        .letter-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .letter-header h2 {
+            font-family: var(--fonte-titulos);
+            color: var(--dourado);
+            font-size: 3.5rem;
+            font-weight: 700;
+        }
+
+        .letter-content {
+            color: var(--texto-carta);
+            font-size: 1.15rem;
+            text-align: justify;
+        }
+
+        .letter-content p {
+            margin-bottom: 1.5em; /* Espaçamento parágrafos */
+            text-indent: 1em; /* Recuo primeira linha */
+        }
+
+        .letter-footer {
+            text-align: right;
+            margin-top: 50px;
+            font-family: var(--fonte-titulos);
+            font-size: 2rem;
+            color: var(--texto-escuro);
+        }
+
+        /* Símbolo de selo no final */
+        .wax-seal {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            color: #b32d2d; /* Vermelho selo */
+            font-size: 3rem;
+            opacity: 0.8;
+        }
+
+        /* --- RESPONSIVIDADE (MOBILE-FIRST) --- */
+        @media (max-width: 600px) {
+            .gatekeeper-content h1 { font-size: 2.2rem; }
+            .love-letter { padding: 40px 25px; margin: 20px 0; }
+            .letter-header h2 { font-size: 2.8rem; }
+            .letter-content { font-size: 1.05rem; line-height: 1.8em; }
+            .love-letter { background-size: 100% 1.8em; line-height: 1.8em;}
+        }
     </style>
 </head>
 <body>
 
-    <div id="floating-background"></div>
-
-    <audio id="bg-music" loop>
-        <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
-    </audio>
+    <div id="site-background"></div>
+    <div id="bg-overlay"></div>
 
     <div id="gatekeeper">
-        <div class="gatekeeper-card">
-            <h1>Nosso Universo Particular</h1>
-            <p>Responda para entrar:</p>
-            <label><strong>Onde foi nosso primeiro beijo?</strong></label>
-            <input type="text" id="answer" placeholder="Dica: Começa com 'C'...">
-            <button onclick="unlock()">Entrar no nosso mundo ❤️</button>
-            <p id="error" class="hidden" style="color: red; margin-top:10px;">Resposta errada, tente de novo meu amor!</p>
+        <div class="gatekeeper-content">
+            <h1>Nosso Universo</h1>
+            <p>Para ler esta carta, responda à nossa pergunta:</p>
+            <span class="pergunta">Onde foi nosso primeiro beijo?</span>
+            
+            <input type="text" id="secret-answer" placeholder="Sua resposta aqui...">
+            <button onclick="checkAnswer()">Abrir Carta ❤️</button>
+            
+            <p id="error-msg" class="hidden">Ops! Tente novamente, meu amor.</p>
         </div>
     </div>
 
-    <main id="app" class="hidden">
-        
-        <section id="dashboard" class="page active">
-            <h1>Para todo o sempre <span class="pulse-heart">❤️</span></h1>
-            <div class="widget">
-                <h2>Nossa Jornada Juntos</h2>
-                <div class="time-container">
-                    <div class="time-box"><span id="days">0</span><small>Dias</small></div>
-                    <div class="time-box"><span id="hours">0</span><small>Hrs</small></div>
-                    <div class="time-box"><span id="mins">0</span><small>Min</small></div>
-                </div>
-                <p>"Em cada detalhe nosso, vejo um universo inteiro."</p>
-            </div>
-        </section>
+    <main id="app">
+        <article class="love-letter">
+            <header class="letter-header">
+                <h2>Minha Vida,</h2>
+            </header>
+            
+            <div class="letter-content">
+                <p>Estou te escrevendo esta carta porque, às vezes, o mundo gira rápido demais e esquecemos de parar e apreciar o que realmente importa. E para mim, o que importa é você.</p>
+                
+                <p>Desde o momento em que nossos caminhos se cruzaram, minha vida ganhou uma cor e uma melodia que eu não sabia que existiam. Você é meu porto seguro, minha risada mais sincera e o sonho que eu nunca quero acordar.</p>
 
-        <section id="capsule" class="page hidden">
-            <h1>Cápsula do Tempo</h1>
-            <div class="widget">
-                <h3>Abra quando...</h3>
-                <div style="display: grid; gap: 10px; margin-top: 15px;">
-                    <button onclick="alert('Lembre-se: eu te amo mais que tudo. Respire fundo, isso vai passar.')">...estiver triste 🥺</button>
-                    <button onclick="alert('Você é a pessoa mais engraçada que conheço! Lembra de quando...')">...quiser rir 😂</button>
-                    <button onclick="alert('O melhor lugar do mundo é dentro do seu abraço.')">...estiver com saudade 🫂</button>
+                <p>Imaginei o cenário de Paris para esta carta porque, assim como a Torre Eiffel se destaca no horizonte, você se destaca em todos os meus pensamentos. Não importa onde estejamos, meu lar é onde você está.</p>
+                
+                <p>Obrigado(a) por ser exatamente quem você é. Eu te amo mais a cada dia.</p>
                 </div>
-            </div>
-        </section>
 
-        <section id="timeline" class="page hidden">
-            <h1>Nossa História</h1>
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <span class="date">15/03/2022</span>
-                    <h3>Onde tudo começou</h3>
-                    <p>O dia em que meu mundo ganhou cores novas.</p>
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <span class="date">12/06/2023</span>
-                    <h3>Primeiro 'Eu te amo'</h3>
-                    <p>As palavras mais doces que já ouvi na vida.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="bucketlist" class="page hidden">
-            <h1>Nossas Promessas</h1>
-            <div class="widget">
-                <ul class="checklist">
-                    <li><input type="checkbox" checked> Ver o pôr do sol na praia</li>
-                    <li><input type="checkbox"> Viajar para Paris</li>
-                    <li><input type="checkbox"> Ter nossa própria casa</li>
-                    <li><input type="checkbox"> Envelhecer de mãos dadas</li>
-                </ul>
-            </div>
-        </section>
-
-        <nav class="bottom-nav">
-            <button class="nav-btn active" onclick="showPage('dashboard', this)">Início</button>
-            <button class="nav-btn" onclick="showPage('capsule', this)">Cápsula</button>
-            <button class="nav-btn" onclick="showPage('timeline', this)">História</button>
-            <button class="nav-btn" onclick="showPage('bucketlist', this)">Promessas</button>
-        </nav>
+            <footer class="letter-footer">
+                Com todo o meu amor,
+            </footer>
+            
+            <span class="wax-seal">❤️</span>
+        </article>
     </main>
 
     <script>
-        // CONFIGURAÇÕES
-        const RESPOSTA = "cinema"; // Mude para a sua resposta
-        const DATA_INICIO = new Date("2022-03-15T20:00:00"); // Mude para sua data
+        // --- CONFIGURAÇÃO ---
+        // Defina a resposta secreta aqui (sempre em letras minúsculas)
+        const RESPOSTA_CORRETA = "cinema"; 
 
-        // LOGIN E MÚSICA
-        function unlock() {
-            const val = document.getElementById('answer').value.toLowerCase().trim();
-            if(val === RESPOSTA) {
-                document.getElementById('gatekeeper').classList.add('hidden');
-                document.getElementById('app').classList.remove('hidden');
-                document.getElementById('bg-music').play();
-                startHearts();
+        // --- LÓGICA DE ACESSO ---
+        function checkAnswer() {
+            const input = document.getElementById('secret-answer');
+            const respostaUsuario = input.value.trim().toLowerCase();
+            const gatekeeper = document.getElementById('gatekeeper');
+            const app = document.getElementById('app');
+            const erro = document.getElementById('error-msg');
+            const bg = document.getElementById('site-background');
+            const overlay = document.getElementById('bg-overlay');
+
+            if (respostaUsuario === RESPOSTA_CORRETA) {
+                // Sucesso: Esconde acesso, mostra carta
+                gatekeeper.style.display = 'none';
+                app.classList.add('visible'); // Usa classe flex para centralizar
+                
+                // UX: Ajusta o fundo para focar na carta
+                bg.style.filter = 'blur(5px) scale(1.05)'; // Desfoca levemente Paris
+                overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.6)'; // Escurece um pouco mais
+                
+                // Permite rolagem se a carta for grande
+                document.body.style.overflow = 'auto'; 
+                document.html.style.overflow = 'auto';
             } else {
-                document.getElementById('error').classList.remove('hidden');
+                // Erro
+                erro.classList.remove('hidden');
+                input.style.border = '2px solid #ffcccc';
+                // Animação de "balanço" no erro (opcional, adicione se quiser)
+                setTimeout(() => input.style.border = 'none', 1500);
             }
         }
 
-        // NAVEGAÇÃO
-        function showPage(id, btn) {
-            document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
-            document.getElementById(id).classList.remove('hidden');
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        }
-
-        // CONTADOR
-        function updateCounter() {
-            const now = new Date();
-            const diff = now - DATA_INICIO;
-            document.getElementById('days').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
-            document.getElementById('hours').innerText = Math.floor((diff / (1000 * 60 * 60)) % 24);
-            document.getElementById('mins').innerText = Math.floor((diff / 1000 / 60) % 60);
-        }
-        setInterval(updateCounter, 1000);
-        updateCounter();
-
-        // CORAÇÕES
-        function startHearts() {
-            setInterval(() => {
-                const heart = document.createElement('div');
-                heart.innerHTML = "❤️";
-                heart.classList.add('heart');
-                heart.style.left = Math.random() * 100 + "vw";
-                heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
-                heart.style.opacity = Math.random();
-                document.getElementById('floating-background').appendChild(heart);
-                setTimeout(() => heart.remove(), 5000);
-            }, 600);
-        }
+        // UX: Permite apertar 'Enter' para enviar
+        document.getElementById('secret-answer').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
     </script>
 </body>
 </html>
